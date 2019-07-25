@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>FreeSpec.Undefined</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library FreeSpec.Undefined</h1>
+
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="FreeSpec.Interface.html#"><span class="id" title="library">FreeSpec.Interface</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="FreeSpec.Program.html#"><span class="id" title="library">FreeSpec.Program</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="FreeSpec.Compose.html#"><span class="id" title="library">FreeSpec.Compose</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Prelude.Control</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Prelude.Control.Classes</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab27"></a><h1 class="section">The Shameful <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a></span> Interface</h1>
+
+
+<div class="paragraph"> </div>
+
+    Using the <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a></span> interface, you can pledge guilty of having
+    undefined behaviour in your formal specification.
+
+<div class="paragraph"> </div>
+
+<a name="lab28"></a><h2 class="section">Definition</h2>
+
+
+<div class="paragraph"> </div>
+
+    
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="Undefined"><span class="id" title="inductive">Undefined</span></a><br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a> :=<br/>
+| <a name="undefined"><span class="id" title="constructor">undefined</span></a> {<span class="id" title="var">A</span>: <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a> <a class="idref" href="FreeSpec.Undefined.html#A"><span class="id" title="variable">A</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab29"></a><h2 class="section">Why using an Interface?</h2>
+
+
+<div class="paragraph"> </div>
+
+    We use an Interface to deal with Undefined Behaviour for at least
+    two reasons:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> It makes obvious that a given Semantics uses the <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#undefined"><span class="id" title="constructor">undefined</span></a></span>
+        effect
+
+</li>
+<li> It is easier to write a specification to check if <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#undefined"><span class="id" title="constructor">undefined</span></a></span>
+        is called
+
+</li>
+</ul>
+
+<div class="paragraph"> </div>
+
+<a name="lab30"></a><h1 class="section"><span class="inlinecode"><span class="id" title="var">UndefMonad</span></span> Typeclass</h1>
+
+
+<div class="paragraph"> </div>
+
+    The UndefMonad is here to provide an easier way to work with
+    undefined behaviour. Indeed, this library provides the required
+    typeclass instances so that if the <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a></span> Interface is used,
+    the <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#undef"><span class="id" title="definition">undef</span></a></span> primitive is available on the top of the monad stack
+    (that is, after the composition of the Interfaces and the use of a
+    State Monad).
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="undef"><span class="id" title="definition">undef</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">ix</span>:  <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>} `{<a class="idref" href="FreeSpec.Undefined.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="FreeSpec.Program.html#1b58f2c53e03512848c181f338438481"><span class="id" title="notation">:|</span></a> <a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">a</span>:   <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Undefined.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="FreeSpec.Undefined.html#a"><span class="id" title="variable">a</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="FreeSpec.Program.html#request"><span class="id" title="definition">request</span></a> <a class="idref" href="FreeSpec.Undefined.html#undefined"><span class="id" title="constructor">undefined</span></a>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>FreeSpec.Program</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library FreeSpec.Program</h1>
+
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Program.Equality.html#"><span class="id" title="library">Coq.Program.Equality</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Program.Tactics.html#"><span class="id" title="library">Coq.Program.Tactics</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Relations.Relations.html#"><span class="id" title="library">Coq.Relations.Relations</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Setoids.Setoid.html#"><span class="id" title="library">Coq.Setoids.Setoid</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Program.Basics.html#"><span class="id" title="library">Coq.Program.Basics</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Logic.FunctionalExtensionality.html#"><span class="id" title="library">Coq.Logic.FunctionalExtensionality</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="FreeSpec.Semantics.html#"><span class="id" title="library">FreeSpec.Semantics</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Prelude.Equality</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Prelude.Control</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Prelude.Control.Classes</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Local Open</span> <span class="id" title="keyword">Scope</span> <span class="id" title="var">prelude_scope</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab8"></a><h1 class="section">The <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> Monad</h1>
+
+<div class="paragraph"> </div>
+
+ In this section, we introduce the <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> Monad. Its definition
+    was originally inspired by the Haskell <a
+    href="https://hackage.haskell.org/package/operational">operational</a>
+    package, and then has been simplified following the example of the
+    <span class="inlinecode"><span class="id" title="var">itree</span></span> (see “From C to Interaction Trees” by the DeepWeb
+    project).
+
+<div class="paragraph"> </div>
+
+    Thanks to the <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> Monad, it becomes easy to
+    specify complex programs with effects which belong to a given
+    interface. 
+</div>
+<div class="code">
+
+<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab9"></a><h2 class="section">Definition</h2>
+
+
+<div class="paragraph"> </div>
+
+    Given <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.html#def.I"><span class="id" title="variable">I</span></a></span> a set of effects (that is, of kind <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a></span>)
+    and <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#A"><span class="id" title="variable">A</span></a></span> the type of the result of a given program, the type of
+    this computation specification is <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.html#def.I"><span class="id" title="variable">I</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#A"><span class="id" title="variable">A</span></a></span>.
+
+<div class="paragraph"> </div>
+
+    Under the hood, an instance of the <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> monad wraps and
+    chains several calls to an underlying interface. More precisely,
+    <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> has two constructors:
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a></span>, which describes the (pure) computation of the value
+      <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a></span>
+
+</li>
+<li> <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#f"><span class="id" title="variable">f</span></a></span>, which describes a call to the underlying
+      interface through the instruction <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span> and a continuation <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#f"><span class="id" title="variable">f</span></a></span> to
+      process this result 
+</li>
+</ul>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="Program"><span class="id" title="inductive">Program</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>:  <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">A</span>:  <span class="id" title="keyword">Type</span>) :=<br/>
+| <a name="Pure"><span class="id" title="constructor">Pure</span></a> (<span class="id" title="var">a</span>:  <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a><br/>
+| <a name="Request"><span class="id" title="constructor">Request</span></a> {<span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">e</span>:  <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span>:  <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>.<br/>
+
+<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a> [<span class="id" title="var">I</span> <span class="id" title="var">A</span>] (<span class="id" title="var">a</span>).<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a> [<span class="id" title="var">I</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span>] (<span class="id" title="var">e</span> <span class="id" title="var">f</span>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab10"></a><h2 class="section">Working with Arbitrary Interfaces</h2>
+
+<div class="paragraph"> </div>
+
+ In practice, one computation may require more than one
+    <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a></span>s, which means we need to be able to compose Interfaces
+    together. The Library <span class="inlinecode"><span class="id" title="library">FreeSpec.Compose</span></span> provides several
+    abstraction to that end.
+
+<div class="paragraph"> </div>
+
+    This poses a challenge in terms of <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> specifications
+    reusability. Thanks to the <span class="inlinecode"><span class="id" title="method">bind</span></span> function, <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span>
+    specifications can be composed together, but <i>they need to
+    share the same <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a></span></i>. To overcome this challenge, we
+    follow the example of the Haskell <a
+    href="https://hackage.haskell.org/package/extensible-effects">extensible-effects</a>
+    package. Thanks to the <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="record">Use</span></a></span> typeclass, we can specify which
+    interfaces a given <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> specification uses, yet leave the
+    actual interface abstract. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Class</span> <a name="Use"><span class="id" title="record">Use</span></a> (<span class="id" title="var">i</span> <span class="id" title="var">ix</span>: <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;:= { <a name="lift_eff"><span class="id" title="projection">lift_eff</span></a> (<span class="id" title="var">a</span>:  <span class="id" title="keyword">Type</span>): <a class="idref" href="FreeSpec.Program.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The most obvious instance of <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="record">Use</span></a></span> is <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="record">Use</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span>. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Instance</span> <a name="Instance_Use"><span class="id" title="instance">Instance_Use</span></a> (<span class="id" title="var">i</span>: <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>): <a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> <a class="idref" href="FreeSpec.Program.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="FreeSpec.Program.html#i"><span class="id" title="variable">i</span></a> :=<br/>
+&nbsp;&nbsp;{ <a class="idref" href="FreeSpec.Program.html#lift_eff"><span class="id" title="method">lift_eff</span></a> := <span class="id" title="keyword">fun</span> <span class="id" title="var">_</span> ⇒ <span class="id" title="definition">id</span><br/>
+&nbsp;&nbsp;}.<br/>
+
+<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="FreeSpec.Program.html#lift_eff"><span class="id" title="method">lift_eff</span></a> [<span class="id" title="var">i</span> <span class="id" title="var">ix</span> <span class="id" title="var">_</span> <span class="id" title="var">a</span>] (<span class="id" title="var">e</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Class</span> <a name="Cons"><span class="id" title="record">Cons</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">X</span> <span class="id" title="var">Rst</span>: <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;: <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;{ <a name="proj_x"><span class="id" title="projection">proj_x</span></a>:    <a class="idref" href="FreeSpec.Program.html#X"><span class="id" title="variable">X</span></a><br/>
+&nbsp;&nbsp;; <a name="proj_rst"><span class="id" title="projection">proj_rst</span></a>:  <a class="idref" href="FreeSpec.Program.html#Rst"><span class="id" title="variable">Rst</span></a><br/>
+&nbsp;&nbsp;}.<br/>
+
+<br/>
+<span class="id" title="keyword">Class</span> <a name="Nil"><span class="id" title="record">Nil</span></a>: <span class="id" title="keyword">Type</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">use_many</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| |- <a class="idref" href="FreeSpec.Program.html#Cons"><span class="id" title="class">Cons</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span> ⇒ <span class="id" title="tactic">constructor</span>; [<span class="id" title="var">typeclasses</span> <span class="id" title="tactic">eauto</span> | <span class="id" title="var">use_many</span>]<br/>
+&nbsp;&nbsp;| |- <a class="idref" href="FreeSpec.Program.html#Nil"><span class="id" title="class">Nil</span></a> ⇒ <span class="id" title="tactic">constructor</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Hint Extern</span> 20 (<a class="idref" href="FreeSpec.Program.html#Cons"><span class="id" title="class">Cons</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span>) ⇒ <span class="id" title="var">use_many</span>: <span class="id" title="var">typeclass_instances</span>.<br/>
+<span class="id" title="keyword">Hint Extern</span> 10 (<a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> <span class="id" title="var">_</span> <span class="id" title="var">_</span>) ⇒ (<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">H</span>: <span class="id" title="keyword">context</span>[<a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> ?<span class="id" title="var">i</span> ?<span class="id" title="var">ix</span>] |- <a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> ?<span class="id" title="var">i</span> ?<span class="id" title="var">ix</span> ⇒ <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span>) : <span class="id" title="var">typeclass_instances</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Notation</span> <a name="f2d5c774d529945d95d4218a3a058725"><span class="id" title="notation">&quot;</span></a>ix ':|' i1 ',' i2 ',' .. ',' i3" :=<br/>
+&nbsp;&nbsp;(<a class="idref" href="FreeSpec.Program.html#Cons"><span class="id" title="class">Cons</span></a> (<a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> <span class="id" title="var">i1</span> <span class="id" title="var">ix</span>) (<a class="idref" href="FreeSpec.Program.html#Cons"><span class="id" title="class">Cons</span></a> (<a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> <span class="id" title="var">i2</span> <span class="id" title="var">ix</span>) .. (<a class="idref" href="FreeSpec.Program.html#Cons"><span class="id" title="class">Cons</span></a> (<a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> <span class="id" title="var">i3</span> <span class="id" title="var">ix</span>) <a class="idref" href="FreeSpec.Program.html#Nil"><span class="id" title="class">Nil</span></a>) ..))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 78, <span class="id" title="var">i1</span>, <span class="id" title="var">i2</span>, <span class="id" title="var">i3</span> <span class="id" title="tactic">at</span> <span class="id" title="var">next</span> <span class="id" title="keyword">level</span>, <span class="id" title="keyword">no</span> <span class="id" title="keyword">associativity</span>).<br/>
+<span class="id" title="keyword">Notation</span> <a name="1b58f2c53e03512848c181f338438481"><span class="id" title="notation">&quot;</span></a>ix ':|' i" :=<br/>
+&nbsp;&nbsp;(<a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="class">Use</span></a> <span class="id" title="var">i</span> <span class="id" title="var">ix</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 78, <span class="id" title="var">i</span> <span class="id" title="tactic">at</span> <span class="id" title="var">next</span> <span class="id" title="keyword">level</span>, <span class="id" title="keyword">no</span> <span class="id" title="keyword">associativity</span>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Using the <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="record">Use</span></a></span> typeclass, we can implement a more generic
+    replacement of the old definition of the <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a></span>
+    constructor.
+
+<div class="paragraph"> </div>
+
+    As a reminder, in the first iterations of FreeSpec, <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a></span> was
+    a constructor of type <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a></span> <span class="inlinecode">→</span> <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a></span>, to model a computation
+    that consists in waiting for the result of an operation and
+    returning this very result.
+
+<div class="paragraph"> </div>
+
+    We now introduce <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#request"><span class="id" title="definition">request</span></a></span>. Its purposes is similar, but thanks to
+    <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Use"><span class="id" title="record">Use</span></a></span>, this functions can be used more easily in a <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span>
+    specification with a different interface type. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="request"><span class="id" title="definition">request</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">i</span>:   <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">ix</span>:  <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>} `{<a class="idref" href="FreeSpec.Program.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="FreeSpec.Program.html#1b58f2c53e03512848c181f338438481"><span class="id" title="notation">:|</span></a> <a class="idref" href="FreeSpec.Program.html#i"><span class="id" title="variable">i</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">a</span>:   <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">e</span>:   <a class="idref" href="FreeSpec.Program.html#i"><span class="id" title="variable">i</span></a> <a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a> (<a class="idref" href="FreeSpec.Program.html#lift_eff"><span class="id" title="method">lift_eff</span></a> <a class="idref" href="FreeSpec.Program.html#e"><span class="id" title="variable">e</span></a>) (@<a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a> <a class="idref" href="FreeSpec.Program.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="FreeSpec.Program.html#a"><span class="id" title="variable">a</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab11"></a><h2 class="section">Monad Laws</h2>
+
+
+<div class="paragraph"> </div>
+
+    <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> <i>is</i> a Monad and therefore obeys the Monad laws.  The
+    <a href="https://wiki.haskell.org/Monad_laws">Haskell Wiki</a>
+    explains in depth what are the laws and why they are usefull. In a
+    nutshell, the laws are intended to ease the use of a given Monad
+    by a programmer by making the monad functionning in general more
+    predictible. By conforming to the Monad laws, one knows its monad
+    will have more chance to behave the way its users may expect it
+    to.
+
+<div class="paragraph"> </div>
+
+    Fortunately, in our case, proving the Monad laws is
+    straightforward. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="program_bind"><span class="id" title="definition">program_bind</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span>:    <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a> <span class="id" title="var">x</span> ⇒ <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a> <span class="id" title="var">e</span> <span class="id" title="var">g</span> ⇒ <a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a> <span class="id" title="var">e</span> (<span class="id" title="keyword">fun</span> <span class="id" title="var">x</span> ⇒ <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> (<span class="id" title="var">g</span> <a class="idref" href="FreeSpec.Program.html#x"><span class="id" title="variable">x</span></a>) <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a>)<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="program_eq_append_pure"><span class="id" title="lemma">program_eq_append_pure</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:  <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:  <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> (@<a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">p</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Logic.FunctionalExtensionality.html#functional_extensionality"><span class="id" title="lemma">functional_extensionality</span></a> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">H</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="program_eq_bind_assoc"><span class="id" title="lemma">program_eq_bind_assoc</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:      <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:      <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span>:      <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">g</span>:      <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#C"><span class="id" title="variable">C</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> (<a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a>) <a class="idref" href="FreeSpec.Program.html#g"><span class="id" title="variable">g</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> (<span class="id" title="keyword">fun</span> <span class="id" title="var">x</span> ⇒ <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> (<a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> <a class="idref" href="FreeSpec.Program.html#x"><span class="id" title="variable">x</span></a>) <a class="idref" href="FreeSpec.Program.html#g"><span class="id" title="variable">g</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">p</span>; [<span class="id" title="tactic">reflexivity</span> |].<br/>
+&nbsp;&nbsp;<span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Logic.FunctionalExtensionality.html#functional_extensionality"><span class="id" title="lemma">functional_extensionality</span></a> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="program_map"><span class="id" title="definition">program_map</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span>:    <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> (<span class="id" title="keyword">fun</span> <span class="id" title="var">x</span> ⇒ <a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a> (<a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> <a class="idref" href="FreeSpec.Program.html#x"><span class="id" title="variable">x</span></a>)).<br/>
+
+<br/>
+#[<span class="id" title="var">program</span>]<br/>
+<span class="id" title="keyword">Instance</span> <a name="program_Functor"><span class="id" title="instance">program_Functor</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>:  <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;: <span class="id" title="class">Functor</span> (<a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>) :=<br/>
+&nbsp;&nbsp;{ <span class="id" title="method">map</span> := @<a class="idref" href="FreeSpec.Program.html#program_map"><span class="id" title="definition">program_map</span></a> <span class="id" title="var">I</span><br/>
+&nbsp;&nbsp;}.<br/>
+<span class="id" title="keyword">Next</span> <span class="id" title="keyword">Obligation</span>. &nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#program_map"><span class="id" title="definition">program_map</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> &lt;- <a class="idref" href="FreeSpec.Program.html#program_eq_append_pure"><span class="id" title="lemma">program_eq_append_pure</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+<span class="id" title="keyword">Next</span> <span class="id" title="keyword">Obligation</span>. &nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <span class="id" title="definition">compose</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#program_map"><span class="id" title="definition">program_map</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind_assoc"><span class="id" title="lemma">program_eq_bind_assoc</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="program_apply"><span class="id" title="definition">program_apply</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">pf</span>:   <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> (<a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#pf"><span class="id" title="variable">pf</span></a> (<span class="id" title="keyword">fun</span> <span class="id" title="var">f</span> ⇒ <span class="id" title="method">map</span> <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>).<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="program_pure"><span class="id" title="definition">program_pure</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:  <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> :=<br/>
+&nbsp;&nbsp;@<a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="program_eq_bind"><span class="id" title="lemma">program_eq_bind</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span> <span class="id" title="var">g</span>:  <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="FreeSpec.Program.html#g"><span class="id" title="variable">g</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="FreeSpec.Program.html#g"><span class="id" title="variable">g</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">R</span>; <span class="id" title="tactic">rewrite</span> <span class="id" title="var">R</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+#[<span class="id" title="var">polymorphic</span>, <span class="id" title="var">program</span>]<br/>
+<span class="id" title="keyword">Instance</span> <a name="program_Applicative"><span class="id" title="instance">program_Applicative</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>:  <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;: <span class="id" title="class">Applicative</span> (<a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>) :=<br/>
+&nbsp;&nbsp;{ <span class="id" title="method">pure</span> := @<a class="idref" href="FreeSpec.Program.html#program_pure"><span class="id" title="definition">program_pure</span></a> <span class="id" title="var">I</span><br/>
+&nbsp;&nbsp;; <span class="id" title="method">apply</span> := @<a class="idref" href="FreeSpec.Program.html#program_apply"><span class="id" title="definition">program_apply</span></a> <span class="id" title="var">I</span><br/>
+&nbsp;&nbsp;}.<br/>
+<span class="id" title="keyword">Next</span> <span class="id" title="keyword">Obligation</span>. &nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#program_apply"><span class="id" title="definition">program_apply</span></a>, <a class="idref" href="FreeSpec.Program.html#program_pure"><span class="id" title="definition">program_pure</span></a>, <a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="method">functor_identity</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+<span class="id" title="keyword">Next</span> <span class="id" title="keyword">Obligation</span>. &nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#program_apply"><span class="id" title="definition">program_apply</span></a>, <a class="idref" href="FreeSpec.Program.html#program_pure"><span class="id" title="definition">program_pure</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#program_map"><span class="id" title="definition">program_map</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind_assoc"><span class="id" title="lemma">program_eq_bind_assoc</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind"><span class="id" title="lemma">program_eq_bind</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Logic.FunctionalExtensionality.html#functional_extensionality"><span class="id" title="lemma">functional_extensionality</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#program_map"><span class="id" title="definition">program_map</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind_assoc"><span class="id" title="lemma">program_eq_bind_assoc</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind"><span class="id" title="lemma">program_eq_bind</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Logic.FunctionalExtensionality.html#functional_extensionality"><span class="id" title="lemma">functional_extensionality</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">y</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind_assoc"><span class="id" title="lemma">program_eq_bind_assoc</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind"><span class="id" title="lemma">program_eq_bind</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Logic.FunctionalExtensionality.html#functional_extensionality"><span class="id" title="lemma">functional_extensionality</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">z</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <span class="id" title="definition">compose</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+#[<span class="id" title="var">program</span>]<br/>
+<span class="id" title="keyword">Instance</span> <a name="program_Monad"><span class="id" title="instance">program_Monad</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>:  <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;: <span class="id" title="class">Monad</span> (<a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>) :=<br/>
+&nbsp;&nbsp;{ <span class="id" title="method">bind</span> := @<a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <span class="id" title="var">I</span><br/>
+&nbsp;&nbsp;}.<br/>
+<span class="id" title="keyword">Next</span> <span class="id" title="keyword">Obligation</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> &lt;- <a class="idref" href="FreeSpec.Program.html#program_eq_append_pure"><span class="id" title="lemma">program_eq_append_pure</span></a>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+<span class="id" title="keyword">Next</span> <span class="id" title="keyword">Obligation</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind_assoc"><span class="id" title="lemma">program_eq_bind_assoc</span></a>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+<span class="id" title="keyword">Next</span> <span class="id" title="keyword">Obligation</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="FreeSpec.Program.html#program_eq_bind"><span class="id" title="lemma">program_eq_bind</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Logic.FunctionalExtensionality.html#functional_extensionality"><span class="id" title="lemma">functional_extensionality</span></a>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab12"></a><h1 class="section"><span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> Interpretation</h1>
+
+
+<div class="paragraph"> </div>
+
+    To actually realise a program with effects <span class="inlinecode"><a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.html#def.I"><span class="id" title="variable">I</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#A"><span class="id" title="variable">A</span></a></span>, one
+    needs a corresponding operational semantics <span class="inlinecode"><span class="id" title="var">Sem.t</span></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.html#def.I"><span class="id" title="variable">I</span></a></span> for the
+    interface described by <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.html#def.I"><span class="id" title="variable">I</span></a></span>.
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="runProgram"><span class="id" title="definition">runProgram</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span>:    <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">sig</span>:  <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Semantics.html#Sem.result"><span class="id" title="inductive">Sem.result</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="FreeSpec.Program.html#Pure"><span class="id" title="constructor">Pure</span></a> <span class="id" title="var">a</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;⇒ <a class="idref" href="FreeSpec.Semantics.html#Sem.mkRes"><span class="id" title="constructor">Sem.mkRes</span></a> <span class="id" title="var">a</span> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="FreeSpec.Program.html#Request"><span class="id" title="constructor">Request</span></a> <span class="id" title="var">e</span> <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;⇒ <span class="id" title="keyword">let</span> <span class="id" title="var">res</span> := <a class="idref" href="FreeSpec.Semantics.html#handle"><span class="id" title="definition">handle</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <span class="id" title="var">e</span> <span class="id" title="tactic">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="FreeSpec.Program.html#runProgram"><span class="id" title="definition">runProgram</span></a> (<a class="idref" href="FreeSpec.Semantics.html#Sem.next"><span class="id" title="definition">Sem.next</span></a> <a class="idref" href="FreeSpec.Program.html#res"><span class="id" title="variable">res</span></a>) (<span class="id" title="var">f</span> (<a class="idref" href="FreeSpec.Semantics.html#Sem.res"><span class="id" title="definition">Sem.res</span></a> <a class="idref" href="FreeSpec.Program.html#res"><span class="id" title="variable">res</span></a>))<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="evalProgram"><span class="id" title="definition">evalProgram</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span>:    <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">sig</span>:  <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="FreeSpec.Semantics.html#Sem.res"><span class="id" title="definition">Sem.res</span></a> (<a class="idref" href="FreeSpec.Program.html#runProgram"><span class="id" title="definition">runProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>).<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="execProgram"><span class="id" title="definition">execProgram</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:   <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span>:   <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">sig</span>: <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:   <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="FreeSpec.Semantics.html#Sem.next"><span class="id" title="definition">Sem.next</span></a> (<a class="idref" href="FreeSpec.Program.html#runProgram"><span class="id" title="definition">runProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Also, we can easily show the <span class="inlinecode"><span class="id" title="var">program_eq</span></span> property is strong
+    enough to be used to replace two equivalent programs in several
+    cases, by defining the related morphisms.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+<span class="id" title="keyword">Add</span> <span class="id" title="var">Parametric</span> <span class="id" title="var">Morphism</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>: <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">A</span>: <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;: (<a class="idref" href="FreeSpec.Program.html#runProgram"><span class="id" title="definition">runProgram</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">with</span> <span class="id" title="var">signature</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">==&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">==&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Semantics.html#Sem.result"><span class="id" title="inductive">Sem.result</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">as</span> <span class="id" title="var">run_program_morphism_2</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">sig1</span> <span class="id" title="var">sig2</span> <span class="id" title="var">Heq_sig</span> <span class="id" title="var">p</span> <span class="id" title="var">q</span> <span class="id" title="var">Heq_p</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">Heq_p</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">revert</span> <span class="id" title="var">sig1</span> <span class="id" title="var">sig2</span> <span class="id" title="var">Heq_sig</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">p</span>; <span class="id" title="tactic">intros</span> <span class="id" title="var">sig1</span> <span class="id" title="var">sig2</span> <span class="id" title="var">Heq_sig</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="var">now</span> <span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">assert</span> (<span class="id" title="var">Hx</span>: <a class="idref" href="FreeSpec.Semantics.html#Sem.res"><span class="id" title="definition">Sem.res</span></a> (<a class="idref" href="FreeSpec.Semantics.html#handle"><span class="id" title="definition">handle</span></a> <span class="id" title="var">sig1</span> <span class="id" title="var">e</span>) <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="FreeSpec.Semantics.html#Sem.res"><span class="id" title="definition">Sem.res</span></a> (<a class="idref" href="FreeSpec.Semantics.html#handle"><span class="id" title="definition">handle</span></a> <span class="id" title="var">sig2</span> <span class="id" title="var">e</span>)) <span class="id" title="tactic">by</span> <span class="id" title="tactic">apply</span> <span class="id" title="var">Heq_sig</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <span class="id" title="var">Hx</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">Heq_sig</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Add</span> <span class="id" title="var">Parametric</span> <span class="id" title="var">Morphism</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>:  <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">A</span>:  <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;: (<a class="idref" href="FreeSpec.Program.html#execProgram"><span class="id" title="definition">execProgram</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">with</span> <span class="id" title="var">signature</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">==&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">==&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">as</span> <span class="id" title="var">exec_program_morphism</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">sig</span> <span class="id" title="var">sig'</span> <span class="id" title="var">Heqs</span> <span class="id" title="var">p</span> <span class="id" title="var">q</span> <span class="id" title="var">Heqp</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#execProgram"><span class="id" title="definition">execProgram</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <span class="id" title="var">Heqs</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="var">Heqp</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Add</span> <span class="id" title="var">Parametric</span> <span class="id" title="var">Morphism</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>:  <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">A</span>:  <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;: (<a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">with</span> <span class="id" title="var">signature</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">==&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">(</span></a>@<span class="id" title="method">equal</span> (<a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>) <span class="id" title="var">_</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Classes.Morphisms.html#8dc5652698a6e16f72dd37bd17d3b973"><span class="id" title="notation">==&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#eq"><span class="id" title="inductive">eq</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">as</span> <span class="id" title="var">eval_program_morphism</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">sig</span> <span class="id" title="var">sig'</span> <span class="id" title="var">Heqs</span> <span class="id" title="var">p</span> <span class="id" title="var">q</span> <span class="id" title="var">Heqp</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <span class="id" title="var">Heqs</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="var">Heqp</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="run_program_bind_assoc"><span class="id" title="lemma">run_program_bind_assoc</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">sig</span>:  <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span>:    <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#runProgram"><span class="id" title="definition">runProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> (<a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="notation">==</span> <a class="idref" href="FreeSpec.Program.html#runProgram"><span class="id" title="definition">runProgram</span></a> (<a class="idref" href="FreeSpec.Program.html#execProgram"><span class="id" title="definition">execProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>) (<a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> (<a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>)).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">revert</span> <span class="id" title="var">sig</span>; <span class="id" title="tactic">induction</span> <span class="id" title="var">p</span>; <span class="id" title="tactic">intro</span> <span class="id" title="var">sig</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="eval_program_bind_assoc"><span class="id" title="lemma">eval_program_bind_assoc</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">sig</span>:  <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span>:    <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> (<a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a> (<a class="idref" href="FreeSpec.Program.html#execProgram"><span class="id" title="definition">execProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>) (<a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> (<a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>)).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <a class="idref" href="FreeSpec.Program.html#run_program_bind_assoc"><span class="id" title="lemma">run_program_bind_assoc</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="exec_program_bind_assoc"><span class="id" title="lemma">exec_program_bind_assoc</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">I</span>:    <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">B</span>:  <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">sig</span>:  <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:    <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">f</span>:    <a class="idref" href="FreeSpec.Program.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Program.html#Program"><span class="id" title="inductive">Program</span></a> <a class="idref" href="FreeSpec.Program.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Program.html#B"><span class="id" title="variable">B</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Program.html#execProgram"><span class="id" title="definition">execProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> (<a class="idref" href="FreeSpec.Program.html#program_bind"><span class="id" title="definition">program_bind</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="FreeSpec.Program.html#execProgram"><span class="id" title="definition">execProgram</span></a> (<a class="idref" href="FreeSpec.Program.html#execProgram"><span class="id" title="definition">execProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>) (<a class="idref" href="FreeSpec.Program.html#f"><span class="id" title="variable">f</span></a> (<a class="idref" href="FreeSpec.Program.html#evalProgram"><span class="id" title="definition">evalProgram</span></a> <a class="idref" href="FreeSpec.Program.html#sig"><span class="id" title="variable">sig</span></a> <a class="idref" href="FreeSpec.Program.html#p"><span class="id" title="variable">p</span></a>)).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">revert</span> <span class="id" title="var">sig</span>; <span class="id" title="tactic">induction</span> <span class="id" title="var">p</span>; <span class="id" title="tactic">intro</span> <span class="id" title="var">sig</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

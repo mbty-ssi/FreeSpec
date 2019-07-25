@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>FreeSpec.Interface</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library FreeSpec.Interface</h1>
+
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+<a name="lab1"></a><h1 class="section">Regural <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a></span>s</h1>
+
+
+<div class="paragraph"> </div>
+
+    We consider an <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a></span> to be a set of <i>operations</i> whose
+    result type only is known. This is usually encoded thanks to a
+    parameterized type in functional programming language, where the
+    type parameter is the type of the result. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="Interface"><span class="id" title="definition">Interface</span></a> := <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+That is, if <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.html#def.I"><span class="id" title="variable">I</span></a></span> is an interface, <span class="inlinecode"><span class="id" title="var">o</span></span> <span class="inlinecode">:</span> <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.html#def.I"><span class="id" title="variable">I</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#A"><span class="id" title="variable">A</span></a></span> is an operation whose
+    result (computed by a handler) is expected to be of type <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#A"><span class="id" title="variable">A</span></a></span>. 
+<div class="paragraph"> </div>
+
+<a name="lab2"></a><h1 class="section">Labeled <span class="inlinecode"><a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a></span>s</h1>
+
+
+<div class="paragraph"> </div>
+
+    We can label an interface with a particular type to enrich a
+    primitive call with a context. The main idea is this label will be
+    stripped before extraction.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <a name="LabeledInterface"><span class="id" title="inductive">LabeledInterface</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">I</span>: <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">L</span>: <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Interface.html#Interface"><span class="id" title="definition">Interface</span></a> :=<br/>
+| <a name="labeled_instruction"><span class="id" title="constructor">labeled_instruction</span></a> (<span class="id" title="var">A</span>: <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">i</span>: <a class="idref" href="FreeSpec.Interface.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Interface.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">l</span>: <a class="idref" href="FreeSpec.Interface.html#L"><span class="id" title="variable">L</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Interface.html#LabeledInterface"><span class="id" title="inductive">LabeledInterface</span></a> <a class="idref" href="FreeSpec.Interface.html#I"><span class="id" title="variable">I</span></a> <a class="idref" href="FreeSpec.Interface.html#L"><span class="id" title="variable">L</span></a> <a class="idref" href="FreeSpec.Interface.html#A"><span class="id" title="variable">A</span></a>.<br/>
+
+<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="FreeSpec.Interface.html#labeled_instruction"><span class="id" title="constructor">labeled_instruction</span></a> [<span class="id" title="var">I</span> <span class="id" title="var">L</span> <span class="id" title="var">A</span>] (<span class="id" title="var">i</span> <span class="id" title="var">l</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Infix</span> <a name="1d38413b581b622c42823395eeb2e6a8"><span class="id" title="notation">&quot;</span></a>&lt;?&gt;" := <a class="idref" href="FreeSpec.Interface.html#LabeledInterface"><span class="id" title="inductive">LabeledInterface</span></a><br/>
+&nbsp;&nbsp;(<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 32, <span class="id" title="keyword">no</span> <span class="id" title="keyword">associativity</span>)<br/>
+&nbsp;&nbsp;: <span class="id" title="var">free_scope</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Infix</span> <a name="395bea0a7502c40497f4fb0e06ef99a8"><span class="id" title="notation">&quot;</span></a>&lt;:&gt;" := <a class="idref" href="FreeSpec.Interface.html#labeled_instruction"><span class="id" title="constructor">labeled_instruction</span></a><br/>
+&nbsp;&nbsp;(<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 32, <span class="id" title="keyword">no</span> <span class="id" title="keyword">associativity</span>)<br/>
+&nbsp;&nbsp;: <span class="id" title="var">free_scope</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

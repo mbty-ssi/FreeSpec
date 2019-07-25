@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>FreeSpec.Exec.Debug</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library FreeSpec.Exec.Debug</h1>
+
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">FreeSpec.Program</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Prelude.Control</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Numbers.BinNums.html#"><span class="id" title="library">Coq.Numbers.BinNums</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Strings.Ascii.html#"><span class="id" title="library">Coq.Strings.Ascii</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Strings.String.html#"><span class="id" title="library">Coq.Strings.String</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Local Open</span> <span class="id" title="keyword">Scope</span> <span class="id" title="var">prelude_scope</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Class</span> <a name="HasExecIsomorphism"><span class="id" title="record">HasExecIsomorphism</span></a> (<span class="id" title="var">A</span>: <span class="id" title="keyword">Type</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="bool_ExecIso"><span class="id" title="instance">bool_ExecIso</span></a>: <a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a>.<br/>
+<span class="id" title="keyword">Instance</span> <a name="Z_ExecIso"><span class="id" title="instance">Z_ExecIso</span></a>: <a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Numbers.BinNums.html#Z"><span class="id" title="inductive">Z</span></a>.<br/>
+<span class="id" title="keyword">Instance</span> <a name="ascii_ExecIso"><span class="id" title="instance">ascii_ExecIso</span></a>: <a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Strings.Ascii.html#ascii"><span class="id" title="inductive">ascii</span></a>.<br/>
+<span class="id" title="keyword">Instance</span> <a name="string_ExecIso"><span class="id" title="instance">string_ExecIso</span></a>: <a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Strings.String.html#string"><span class="id" title="inductive">string</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Module</span> <a name="Debug"><span class="id" title="module">Debug</span></a>.<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Inductive</span> <a name="Debug.i"><span class="id" title="inductive">i</span></a>: <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;| <a name="Debug.Iso"><span class="id" title="constructor">Iso</span></a>: <span class="id" title="keyword">∀</span> {<span class="id" title="var">A</span>} `{<a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a>}, <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#i"><span class="id" title="inductive">i</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a><br/>
+&nbsp;&nbsp;| <a name="Debug.Inspect"><span class="id" title="constructor">Inspect</span></a>: <span class="id" title="keyword">∀</span> {<span class="id" title="var">A</span>} `{<a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a>}, <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#i"><span class="id" title="inductive">i</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Strings.String.html#string"><span class="id" title="inductive">string</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Get a string which describes the argument (from the
+      Exec plugin perspective). 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="Debug.inspect"><span class="id" title="definition">inspect</span></a> {<span class="id" title="var">ix</span>} `{<span class="id" title="class">Use</span> <a class="idref" href="FreeSpec.Exec.Debug.html#Debug.i"><span class="id" title="inductive">i</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#ix"><span class="id" title="variable">ix</span></a>} {<span class="id" title="var">A</span>} `{<a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="inductive">Program</span> <a class="idref" href="FreeSpec.Exec.Debug.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Strings.String.html#string"><span class="id" title="inductive">string</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="definition">request</span> <span class="id" title="notation">&lt;&lt;&lt;</span> <a class="idref" href="FreeSpec.Exec.Debug.html#Debug.Inspect"><span class="id" title="constructor">Inspect</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Should acts as <span class="inlinecode"><span class="id" title="var">id</span></span> as long as there is no bug in the
+      FreeSpec.Exec plugin (primilarly intended to write test cases
+      for conversion functions in Coq) 
+</div>
+<div class="code">
+&nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a name="Debug.iso"><span class="id" title="definition">iso</span></a> {<span class="id" title="var">ix</span>} `{<span class="id" title="class">Use</span> <a class="idref" href="FreeSpec.Exec.Debug.html#Debug.i"><span class="id" title="inductive">i</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#ix"><span class="id" title="variable">ix</span></a>} {<span class="id" title="var">A</span>} `{<a class="idref" href="FreeSpec.Exec.Debug.html#HasExecIsomorphism"><span class="id" title="class">HasExecIsomorphism</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="inductive">Program</span> <a class="idref" href="FreeSpec.Exec.Debug.html#ix"><span class="id" title="variable">ix</span></a> <a class="idref" href="FreeSpec.Exec.Debug.html#A"><span class="id" title="variable">A</span></a> :=<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="definition">request</span> <span class="id" title="notation">&lt;&lt;&lt;</span> <a class="idref" href="FreeSpec.Exec.Debug.html#Debug.Iso"><span class="id" title="constructor">Iso</span></a>.<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="FreeSpec.Exec.Debug.html#Debug"><span class="id" title="module">Debug</span></a>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

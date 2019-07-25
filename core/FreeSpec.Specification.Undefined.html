@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>FreeSpec.Specification.Undefined</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library FreeSpec.Specification.Undefined</h1>
+
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="FreeSpec.Undefined.html#"><span class="id" title="library">FreeSpec.Undefined</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="FreeSpec.Specification.html#"><span class="id" title="library">FreeSpec.Specification</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="FreeSpec.Semantics.html#"><span class="id" title="library">FreeSpec.Semantics</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+We now define a generic-purpose specification called “escape the
+    undefined hell”. From a safety/secure point of view, one should
+    avoid the <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#undef"><span class="id" title="definition">undef</span></a></span> instruction at all cost, because we cannot
+    reason about it.
+
+<div class="paragraph"> </div>
+
+    The <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.Undefined.html#escape_undefined_hell"><span class="id" title="definition">escape_undefined_hell</span></a></span> is here to verify that.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="escape_undefined_hell_step"><span class="id" title="definition">escape_undefined_hell_step</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">fun</span> (<span class="id" title="var">R</span>:  <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a> <a class="idref" href="FreeSpec.Specification.Undefined.html#R"><span class="id" title="variable">R</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="FreeSpec.Specification.Undefined.html#R"><span class="id" title="variable">R</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#unit"><span class="id" title="inductive">unit</span></a>)<br/>
+&nbsp;&nbsp;⇒ <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#tt"><span class="id" title="constructor">tt</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="escape_undefined_hell_precondition"><span class="id" title="definition">escape_undefined_hell_precondition</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">fun</span> (<span class="id" title="var">R</span>:  <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a> <a class="idref" href="FreeSpec.Specification.Undefined.html#R"><span class="id" title="variable">R</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#unit"><span class="id" title="inductive">unit</span></a>)<br/>
+&nbsp;&nbsp;⇒ <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#False"><span class="id" title="inductive">False</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="escape_undefined_hell_postcondition"><span class="id" title="definition">escape_undefined_hell_postcondition</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">fun</span> (<span class="id" title="var">R</span>:  <span class="id" title="keyword">Type</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a> <a class="idref" href="FreeSpec.Specification.Undefined.html#R"><span class="id" title="variable">R</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="FreeSpec.Specification.Undefined.html#R"><span class="id" title="variable">R</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">_</span>:  <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#unit"><span class="id" title="inductive">unit</span></a>)<br/>
+&nbsp;&nbsp;⇒ <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#True"><span class="id" title="inductive">True</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="escape_undefined_hell"><span class="id" title="definition">escape_undefined_hell</span></a><br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Specification.html#Specification"><span class="id" title="record">Specification</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#unit"><span class="id" title="inductive">unit</span></a> <a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a> :=<br/>
+&nbsp;&nbsp;{| <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">abstract_step</span></a>  <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">:=</span></a> <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">escape_undefined_hell_step</span></a><br/>
+&nbsp;&nbsp;&nbsp;<a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">;</span></a> <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">precondition</span></a>   <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">:=</span></a> <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">escape_undefined_hell_precondition</span></a><br/>
+&nbsp;&nbsp;&nbsp;<a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">;</span></a> <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">postcondition</span></a>  <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">:=</span></a> <a class="idref" href="FreeSpec.Specification.html#Build_Specification"><span class="id" title="constructor">escape_undefined_hell_postcondition</span></a><br/>
+&nbsp;&nbsp;&nbsp;|}.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+It is easy to prove that any <span class="inlinecode"><span class="id" title="library">Semantics</span></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span> complies to
+    with specification if the counter is still set to <span class="inlinecode">0</span>, that is: <span class="inlinecode"><a class="idref" href="FreeSpec.Semantics.html#i"><span class="id" title="variable">i</span></a></span>
+    <span class="inlinecode">:&gt;</span> <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.Undefined.html#escape_undefined_hell"><span class="id" title="definition">escape_undefined_hell</span></a></span> <span class="inlinecode">[<a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#tt"><span class="id" title="constructor">tt</span></a>]</span>
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="escape_undefined_hell_compliance"><span class="id" title="lemma">escape_undefined_hell_compliance</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">int</span>:  <a class="idref" href="FreeSpec.Semantics.html#Sem.t"><span class="id" title="inductive">Sem.t</span></a> <a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a>)<br/>
+&nbsp;&nbsp;: <a class="idref" href="FreeSpec.Specification.Undefined.html#int"><span class="id" title="variable">int</span></a> <a class="idref" href="FreeSpec.Specification.html#f733d0314146ee3607e3a19df90b9e1f"><span class="id" title="notation">|=</span></a> <a class="idref" href="FreeSpec.Specification.Undefined.html#escape_undefined_hell"><span class="id" title="definition">escape_undefined_hell</span></a> <a class="idref" href="FreeSpec.Specification.html#f733d0314146ee3607e3a19df90b9e1f"><span class="id" title="notation">[</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#tt"><span class="id" title="constructor">tt</span></a><a class="idref" href="FreeSpec.Specification.html#f733d0314146ee3607e3a19df90b9e1f"><span class="id" title="notation">]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">intros</span> <span class="id" title="var">A</span> <span class="id" title="var">e</span> <span class="id" title="var">Hpre</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">Hpre</span>.<br/>
+&nbsp;&nbsp;+ <span class="id" title="tactic">intros</span> <span class="id" title="var">A</span> <span class="id" title="var">e</span> <span class="id" title="var">Hpre</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">Hpre</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The main idea behing the <span class="inlinecode"><a class="idref" href="FreeSpec.Specification.Undefined.html#escape_undefined_hell"><span class="id" title="definition">escape_undefined_hell</span></a></span> specification is
+    to be used as soon as the <span class="inlinecode"><a class="idref" href="FreeSpec.Undefined.html#Undefined"><span class="id" title="inductive">Undefined</span></a></span> interface is used in a
+    model.
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>

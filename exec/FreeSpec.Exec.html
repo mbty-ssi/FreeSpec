@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>FreeSpec.Exec</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library FreeSpec.Exec</h1>
+
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Prelude.Control</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">FreeSpec.Component</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">FreeSpec.Compose</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">FreeSpec.Program</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="FreeSpec.Exec.Debug.html#"><span class="id" title="library">FreeSpec.Exec.Debug</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Local Open</span> <span class="id" title="keyword">Scope</span> <span class="id" title="var">free_scope</span>.<br/>
+<span class="id" title="keyword">Local Open</span> <span class="id" title="keyword">Scope</span> <span class="id" title="var">prelude_scope</span>.<br/>
+
+<br/>
+<span class="id" title="var">Declare</span> <span class="id" title="var">ML</span> <span class="id" title="keyword">Module</span> "exec_plugin".<br/>
+
+<br/>
+#[<span class="id" title="var">local</span>]<br/>
+<span class="id" title="keyword">Fixpoint</span> <a name="extends"><span class="id" title="definition">extends</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">Ix</span> <span class="id" title="var">J</span>:  <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">S</span>:   <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">s</span>:     <a class="idref" href="FreeSpec.Exec.html#S"><span class="id" title="variable">S</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">comp</span>:  <span class="id" title="definition">Component</span> <a class="idref" href="FreeSpec.Exec.html#J"><span class="id" title="variable">J</span></a> <a class="idref" href="FreeSpec.Exec.html#S"><span class="id" title="variable">S</span></a> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:     <span class="id" title="inductive">Program</span> (<a class="idref" href="FreeSpec.Exec.html#J"><span class="id" title="variable">J</span></a> <span class="id" title="notation">&lt;+&gt;</span> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a>) <a class="idref" href="FreeSpec.Exec.html#A"><span class="id" title="variable">A</span></a>)<br/>
+: <span class="id" title="inductive">Program</span> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a> (<a class="idref" href="FreeSpec.Exec.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#11c698c8685bb8ab1cf725545c085ac4"><span class="id" title="notation">×</span></a> <a class="idref" href="FreeSpec.Exec.html#S"><span class="id" title="variable">S</span></a>) :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="FreeSpec.Exec.html#p"><span class="id" title="variable">p</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <span class="id" title="constructor">Pure</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;⇒ <span class="id" title="constructor">Pure</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">(</span></a><span class="id" title="var">x</span><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">,</span></a> <a class="idref" href="FreeSpec.Exec.html#s"><span class="id" title="variable">s</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">)</span></a><br/>
+&nbsp;&nbsp;| <span class="id" title="constructor">Request</span> (<span class="id" title="constructor">InL</span> <span class="id" title="var">e</span>) <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;⇒ <span class="id" title="var">res</span> <span class="id" title="notation">&lt;-</span> <a class="idref" href="FreeSpec.Exec.html#comp"><span class="id" title="variable">comp</span></a> <span class="id" title="var">_</span> <span class="id" title="var">e</span> <a class="idref" href="FreeSpec.Exec.html#s"><span class="id" title="variable">s</span></a><span class="id" title="notation">;</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="FreeSpec.Exec.html#extends"><span class="id" title="definition">extends</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#snd"><span class="id" title="definition">snd</span></a> <a class="idref" href="FreeSpec.Exec.html#res"><span class="id" title="variable">res</span></a>) <a class="idref" href="FreeSpec.Exec.html#comp"><span class="id" title="variable">comp</span></a> (<span class="id" title="var">f</span> (<a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#fst"><span class="id" title="definition">fst</span></a> <a class="idref" href="FreeSpec.Exec.html#res"><span class="id" title="variable">res</span></a>))<br/>
+&nbsp;&nbsp;| <span class="id" title="constructor">Request</span> (<span class="id" title="constructor">InR</span> <span class="id" title="var">e</span>) <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;⇒ <span class="id" title="constructor">Request</span> <span class="id" title="var">e</span> (<span class="id" title="keyword">fun</span> <span class="id" title="var">x</span> ⇒ <a class="idref" href="FreeSpec.Exec.html#extends"><span class="id" title="definition">extends</span></a> <a class="idref" href="FreeSpec.Exec.html#s"><span class="id" title="variable">s</span></a> <a class="idref" href="FreeSpec.Exec.html#comp"><span class="id" title="variable">comp</span></a> (<span class="id" title="var">f</span> <a class="idref" href="FreeSpec.Exec.html#x"><span class="id" title="variable">x</span></a>))<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+With FreeSpec.Exec, it becomes possible to interpret a term of type <span class="inlinecode"><span class="id" title="library">Program</span></span>
+    <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a></span> <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#A"><span class="id" title="variable">A</span></a></span>, where <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a></span> depends on the plugins loaded by the user.
+
+<div class="paragraph"> </div>
+
+    In addition, we provide <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#withComponent"><span class="id" title="definition">withComponent</span></a></span>, a helper function to extend the set
+    of interfaces that can be executed with FreeSpec <span class="inlinecode"><span class="id" title="library">Component</span></span>s. There are
+    several advantages to rely on <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#withComponent"><span class="id" title="definition">withComponent</span></a></span> rather than writing an OCaml
+    plugin, the most important being a handler in Coq is not part of the
+    TCB. Besides, it can be verified as any FreeSpec <span class="inlinecode"><span class="id" title="library">Component</span></span>. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a name="withComponent"><span class="id" title="definition">withComponent</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">Ix</span> <span class="id" title="var">J</span>:         <span class="id" title="keyword">Type</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<span class="id" title="var">A</span> <span class="id" title="var">S</span>:          <span class="id" title="keyword">Type</span>}<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+<div class="doc">
+A <span class="inlinecode"><span class="id" title="library">Component</span></span> carries its own state. The <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#initializer"><span class="id" title="variable">initializer</span></a></span> is a
+             computation to construct the initial state of the component 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">initializer</span>:  <span class="id" title="inductive">Program</span> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a> <a class="idref" href="FreeSpec.Exec.html#S"><span class="id" title="variable">S</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+<div class="doc">
+The <span class="inlinecode"><span class="id" title="library">Component</span></span> used to implement a semantics for J 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">comp</span>:         <span class="id" title="definition">Component</span> <a class="idref" href="FreeSpec.Exec.html#J"><span class="id" title="variable">J</span></a> <a class="idref" href="FreeSpec.Exec.html#S"><span class="id" title="variable">S</span></a> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+<div class="doc">
+The <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#finalizer"><span class="id" title="variable">finalizer</span></a></span> is a clean-up computation to “destruct” the
+             <span class="inlinecode"><span class="id" title="library">Component</span></span> final state 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">finalizer</span>:    <a class="idref" href="FreeSpec.Exec.html#S"><span class="id" title="variable">S</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Logic.html#1c93e43e07fbeaeb6a625cb6614beb5d"><span class="id" title="notation">→</span></a> <span class="id" title="inductive">Program</span> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#unit"><span class="id" title="inductive">unit</span></a>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+<div class="doc">
+A computation to interpret, that uses <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#J"><span class="id" title="variable">J</span></a></span> in addition to <span class="inlinecode"><a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a></span>. 
+</div>
+<div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">p</span>:            <span class="id" title="inductive">Program</span> (<a class="idref" href="FreeSpec.Exec.html#J"><span class="id" title="variable">J</span></a> <span class="id" title="notation">&lt;+&gt;</span> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a>) <a class="idref" href="FreeSpec.Exec.html#A"><span class="id" title="variable">A</span></a>)<br/>
+&nbsp;&nbsp;: <span class="id" title="inductive">Program</span> <a class="idref" href="FreeSpec.Exec.html#Ix"><span class="id" title="variable">Ix</span></a> <a class="idref" href="FreeSpec.Exec.html#A"><span class="id" title="variable">A</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="var">s</span> <span class="id" title="notation">&lt;-</span> <a class="idref" href="FreeSpec.Exec.html#initializer"><span class="id" title="variable">initializer</span></a><span class="id" title="notation">;</span><br/>
+&nbsp;&nbsp;<span class="id" title="var">res</span> <span class="id" title="notation">&lt;-</span> <a class="idref" href="FreeSpec.Exec.html#extends"><span class="id" title="definition">extends</span></a> <a class="idref" href="FreeSpec.Exec.html#s"><span class="id" title="variable">s</span></a> <a class="idref" href="FreeSpec.Exec.html#comp"><span class="id" title="variable">comp</span></a> <a class="idref" href="FreeSpec.Exec.html#p"><span class="id" title="variable">p</span></a><span class="id" title="notation">;</span><br/>
+&nbsp;&nbsp;<a class="idref" href="FreeSpec.Exec.html#finalizer"><span class="id" title="variable">finalizer</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#snd"><span class="id" title="definition">snd</span></a> <a class="idref" href="FreeSpec.Exec.html#res"><span class="id" title="variable">res</span></a>)<span class="id" title="notation">;;</span><br/>
+&nbsp;&nbsp;<span class="id" title="method">pure</span> (<a class="idref" href="http://coq.inria.fr/distrib/V8.9.0/stdlib//Coq.Init.Datatypes.html#fst"><span class="id" title="definition">fst</span></a> <a class="idref" href="FreeSpec.Exec.html#res"><span class="id" title="variable">res</span></a>).<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
